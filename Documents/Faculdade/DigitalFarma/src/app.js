@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const path = require("path");
 
 const rotas = require("./rota");
+require("dotenv").config()
 
 require("./dbCofing/dbCofing");
 

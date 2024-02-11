@@ -16,28 +16,36 @@ const rota = rotas.get
 //  
 
 module.exports = {
-
-    async acesso(req,res){
-    const Medicamento = await medicamento.find();
-    
-    res.render("../view/paciente.ejs", {Medicamento});
-    
-    
+    async acesso(req, res) {
+        try {
+            const Medicamento = await medicamento.find().maxTimeMS(5000); // Define o tempo limite como 5 segundos (5000 milissegundos)
+            if (Medicamento.length === 0) {
+                console.log("Sem medicamentos!");
+                // Retorne uma resposta adequada para a ausência de medicamentos, se necessário
+            } else {
+                res.render("../view/paciente.ejs", { Medicamento });
+            }
+        } catch (error) {
+            console.error("Erro ao acessar medicamentos:", error);
+            // Retorne uma resposta de erro adequada, se necessário
+        }
     },
-
-
-async create(req,res){
-const { nome, idade, medicamento } = req.body;
-    const criaPacient = await paciente.create ({
-        nome,
-        idade,
-        medicamento    
-
-
-    });
-    console.log("Paciente " + criaPacient.nome + " criado");
-    res.redirect("/home");
-},
+    
+    async create(req, res) {
+        try {
+            const { nome, idade, medicamento } = req.body;
+            const criaPacient = await paciente.create({
+                nome,
+                idade,
+                medicamento
+            });
+            console.log("Paciente " + criaPacient.nome + " criado");
+            res.redirect("/home");
+        } catch (error) {
+            console.error("Erro ao criar paciente:", error);
+            // Retorne uma resposta de erro adequada, se necessário
+        }
+    },
 
 async lista(req,res){
 
